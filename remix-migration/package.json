@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "build:netlify": "remix build && cp _redirects public/_redirects",
+    "build:netlify": "remix build && cpx _redirects public/",
     "dev": "remix dev",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
@@ -39,10 +39,10 @@
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
+    "@remix-run/netlify": "1.19.2",
     "@remix-run/node": "^2.5.1",
     "@remix-run/react": "^2.5.1",
     "@remix-run/serve": "^2.5.1",
-    "@remix-run/netlify": "1.19.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -70,6 +70,7 @@
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.20",
+    "cpx": "^1.5.0",
     "eslint": "^8.57.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.1",
@@ -78,4 +79,4 @@
   "engines": {
     "node": ">=18.0.0"
   }
-} 
+}
