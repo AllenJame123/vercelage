@@ -4,9 +4,8 @@ export default {
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
-  serverBuildPath: "netlify/functions/server.js",
-  serverModuleFormat: "esm",
-  serverPlatform: "node",
+  serverBuildTarget: "netlify",
+  server: "./server.js",
   tailwind: true,
   future: {
     v2_dev: true,
