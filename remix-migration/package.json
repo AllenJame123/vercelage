@@ -2,7 +2,6 @@
   "name": "age-o-matic-remix",
   "private": true,
   "sideEffects": false,
-  "type": "module",
   "scripts": {
     "build": "remix build",
     "build:netlify": "remix build && cpx _redirects public/",
