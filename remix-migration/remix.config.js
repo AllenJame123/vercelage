@@ -5,7 +5,7 @@ export default {
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   serverBuildTarget: "netlify",
-  server: "./server.js",
+  server: "./netlify/functions/server.js",
   tailwind: true,
   future: {
     v2_dev: true,
