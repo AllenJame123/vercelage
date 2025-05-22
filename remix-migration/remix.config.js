@@ -1,18 +1,18 @@
 /** @type {import('@remix-run/dev').AppConfig} */
-export default {
+const isNetlify = process.env.NETLIFY === "true";
+const isVercel = !!process.env.VERCEL;
+
+module.exports = {
   ignoredRouteFiles: ["**/.*"],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
-  serverBuildTarget: "netlify",
-  server: "./netlify/functions/server.js",
+  serverBuildTarget: isNetlify ? "netlify" : isVercel ? "vercel" : undefined,
+  server: isNetlify
+    ? "./netlify/functions/server.js"
+    : isVercel
+    ? "./server.js"
+    : undefined,
   tailwind: true,
-  future: {
-    v2_dev: true,
-    v2_errorBoundary: true,
-    v2_headers: true,
-    v2_meta: true,
-    v2_normalizeFormMethod: true,
-    v2_routeConvention: true,
-  },
+  // Remove obsolete future flags if you see warnings
 }; 
