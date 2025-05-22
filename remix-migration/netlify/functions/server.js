@@ -1,7 +1,7 @@
-import { createRequestHandler } from "@remix-run/node";
-import * as build from "@remix-run/netlify/server-build";
+const { createRequestHandler } = require("@remix-run/node");
+const build = require("@remix-run/netlify/server-build");
 
-export const handler = createRequestHandler({
+exports.handler = createRequestHandler({
   build,
   mode: process.env.NODE_ENV,
 }); 
