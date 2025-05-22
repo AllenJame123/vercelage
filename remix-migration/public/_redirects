@@ -1,0 +1,3 @@
+/* /.netlify/functions/server 200
+/build/* /build/:splat 200
+/favicon.ico /favicon.ico 200 
