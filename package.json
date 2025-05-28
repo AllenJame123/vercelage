@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "build:netlify": "remix build && cpx _redirects public/",
+    "build:netlify": "remix build && copyfiles -u 1 _redirects public/",
     "dev": "remix dev",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
@@ -71,7 +71,7 @@
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.20",
-    "cpx": "^1.5.0",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.57.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.1",

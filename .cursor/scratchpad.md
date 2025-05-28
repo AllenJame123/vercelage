@@ -233,4 +233,6 @@ The Age-O-Matic website currently uses React with some SSR capabilities through 
 - When using "type": "module" in package.json, ensure all .js files use ES module syntax (export default instead of module.exports)
 - For optimal favicon support, provide multiple sizes and formats (ICO, PNG, Apple Touch Icon) and include a web manifest
 - Regularly run npm audit to check for security vulnerabilities and update dependencies accordingly
-- Keep Remix and its dependencies up to date to address security issues 
+- Keep Remix and its dependencies up to date to address security issues
+- Replace deprecated or vulnerable dependencies with modern alternatives (e.g., cpx → copyfiles)
+- Use npm audit regularly to identify and address security vulnerabilities 
