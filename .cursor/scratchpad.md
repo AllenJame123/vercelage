@@ -231,4 +231,6 @@ The Age-O-Matic website currently uses React with some SSR capabilities through 
 - Enable Remix future flags early to prepare for React Router v7 changes
 - Keep PostCSS configuration in ES module format for better performance 
 - When using "type": "module" in package.json, ensure all .js files use ES module syntax (export default instead of module.exports)
-- For optimal favicon support, provide multiple sizes and formats (ICO, PNG, Apple Touch Icon) and include a web manifest 
+- For optimal favicon support, provide multiple sizes and formats (ICO, PNG, Apple Touch Icon) and include a web manifest
+- Regularly run npm audit to check for security vulnerabilities and update dependencies accordingly
+- Keep Remix and its dependencies up to date to address security issues 
