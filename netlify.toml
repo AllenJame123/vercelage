@@ -1,6 +1,6 @@
 [build]
-  command = "npm run build"
-  publish = "dist/client"
+  command = "npm run build:netlify"
+  publish = "public"
   functions = "netlify/functions"
   edge_functions = "netlify/edge-functions"
 
