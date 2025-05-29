@@ -1,8 +1,18 @@
 [build]
-  command = "npm run build:netlify"
+  command = "npm run build"
   publish = "public"
   functions = "netlify/functions"
-  edge_functions = "netlify/edge-functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NODE_ENV = "production"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@remix-run/*"]
 
 # Serve static assets directly
 [[redirects]]
@@ -31,3 +41,4 @@
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
+  force = true

@@ -49,4 +49,13 @@ export default {
   watchPaths: ["./app/**/*"],
   // Add caching configuration
   cacheDirectory: "./node_modules/.cache/remix",
+  // Add manifest configuration
+  manifest: {
+    name: "age-o-matic",
+    short_name: "age-o-matic",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#ffffff",
+    theme_color: "#000000",
+  },
 }; 

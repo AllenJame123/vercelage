@@ -10,6 +10,9 @@ console.log('Build path:', BUILD_PATH);
 
 // Verify build directory exists
 if (!existsSync(BUILD_PATH)) {
+  console.error('Build directory not found at:', BUILD_PATH);
+  console.error('Current working directory:', process.cwd());
+  console.error('Directory contents:', require('fs').readdirSync(process.cwd()));
   throw new Error(`Build directory not found at: ${BUILD_PATH}`);
 }
 
