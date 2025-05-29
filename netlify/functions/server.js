@@ -3,7 +3,7 @@ import { join } from 'path';
 import { fileURLToPath } from 'url';
 
 // Get the directory name using ES modules
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const currentDir = fileURLToPath(new URL('.', import.meta.url));
 
 // Ensure we're using the correct build path for Netlify Functions
 const BUILD_PATH = join(process.cwd(), 'build');
