@@ -5,7 +5,7 @@ import { Card } from "../components/ui/card";
 import { Label } from "../components/ui/label";
 import { ResultCard } from "../components/age-calculator/ResultCard";
 import { addDays, addWeeks, format, subWeeks } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar } from "../components/ui/calendar";
 import { Check } from "lucide-react";
 import { PregnancyWeekData } from "../components/pregnancy-calculator/pregnancyData";
@@ -108,6 +108,7 @@ interface PregnancyResult {
   currentWeek: number;
   trimester: string;
   daysRemaining: number;
+  selectedDate: string;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -154,7 +155,8 @@ export async function action({ request }: ActionFunctionArgs) {
     conceptionDate: format(conceptionDate, "MMMM d, yyyy"),
     currentWeek: Math.max(0, currentWeek),
     trimester,
-    daysRemaining
+    daysRemaining,
+    selectedDate: lastPeriodStr
   };
 
   return json({ result });
@@ -217,8 +219,19 @@ export default function PregnancyCalculator() {
   const navigation = useNavigation();
   const { jsonLd, breadcrumbJsonLd, faqJsonLd } = useLoaderData<typeof loader>();
   const isSubmitting = navigation.state === "submitting";
-  
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+
+  // For SSR: use the date from actionData if present
+  const serverSelectedDate = actionData && 'result' in actionData && actionData.result && actionData.result.selectedDate
+    ? new Date(actionData.result.selectedDate)
+    : undefined;
+
+  // For client: allow user to pick a date, but default to server date if present
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(serverSelectedDate);
+
+  // Keep local state in sync with server-selected date on navigation
+  useEffect(() => {
+    if (serverSelectedDate) setSelectedDate(serverSelectedDate);
+  }, [serverSelectedDate]);
 
   // Helper to get the date for a given week number
   const getDateForWeek = (weekNumber: number) => {
@@ -247,6 +260,7 @@ export default function PregnancyCalculator() {
               {isSubmitting ? "Calculating..." : "Calculate"}
             </Button>
           </Form>
+          {/* SSR: Render results if present in actionData */}
           {actionData && 'result' in actionData && (
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="border-2 border-[#19b6e9] rounded-lg p-6 text-center">
@@ -262,19 +276,19 @@ export default function PregnancyCalculator() {
             </div>
           )}
         </div>
-        {/* Pregnancy Timeline Table */}
-        {selectedDate && (
+        {/* SSR: Render timeline if date is present in actionData */}
+        {actionData && 'result' in actionData && actionData.result.selectedDate && (
           <div className="bg-white rounded-xl shadow p-8 mb-8">
             <h2 className="text-2xl font-bold text-center mb-6">Pregnancy Timeline</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border rounded-lg">
                 <PregnancyTableHeader />
                 <tbody>
-                  {generatePregnancyTimeline(selectedDate).map((week) => (
+                  {generatePregnancyTimeline(new Date(actionData.result.selectedDate)).map((week) => (
                     <PregnancyWeekRow
                       key={week.week}
                       week={week}
-                      currentWeek={actionData && 'result' in actionData ? actionData.result.currentWeek : 0}
+                      currentWeek={actionData.result.currentWeek}
                     />
                   ))}
                 </tbody>
