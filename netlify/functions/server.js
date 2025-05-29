@@ -1,9 +1,5 @@
 import { createRequestHandler } from '@remix-run/netlify';
 import { join } from 'path';
-import { fileURLToPath } from 'url';
-
-// Get the directory name using ES modules
-const currentDir = fileURLToPath(new URL('.', import.meta.url));
 
 // Ensure we're using the correct build path for Netlify Functions
 const BUILD_PATH = join(process.cwd(), 'build');
