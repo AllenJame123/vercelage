@@ -6,6 +6,28 @@ export default {
   ...(isNetlify && {
     serverBuildTarget: "netlify",
     server: "./netlify/functions/server.js",
+    serverModuleFormat: "esm",
+    future: {
+      v2_dev: true,
+      v2_errorBoundary: true,
+      v2_headers: true,
+      v2_meta: true,
+      v2_normalizeFormMethod: true,
+      v2_routeConvention: true,
+    },
   }),
   tailwind: true,
+  // Ensure routes are properly compiled
+  routes: (defineRoutes) => {
+    return defineRoutes((route) => {
+      route("/", "routes/_index.tsx");
+      route("/difference", "routes/difference.tsx");
+      route("/date-calculator", "routes/date-calculator.tsx");
+      route("/birthday-countdown", "routes/birthday-countdown.tsx");
+      route("/pregnancy-calculator", "routes/pregnancy-calculator.tsx");
+      route("/leap-year-calculator", "routes/leap-year-calculator.tsx");
+      route("/retirement-calculator", "routes/retirement-calculator.tsx");
+      route("/generation-finder", "routes/generation-finder.tsx");
+    });
+  },
 }; 
