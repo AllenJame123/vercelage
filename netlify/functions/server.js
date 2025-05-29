@@ -1,8 +1,18 @@
 import { createRequestHandler } from '@remix-run/netlify';
 import { join } from 'path';
 
-// Use process.cwd() instead of import.meta.url for Netlify Functions environment
+// Ensure we're using the correct build path for Netlify Functions
+const BUILD_PATH = join(process.cwd(), 'build');
+
+// Log the build path for debugging
+console.log('Build path:', BUILD_PATH);
+
 export const handler = createRequestHandler({
-  build: join(process.cwd(), 'build'),
-  mode: process.env.NODE_ENV
+  build: BUILD_PATH,
+  mode: process.env.NODE_ENV,
+  // Add error handling for route loading
+  onError: (error) => {
+    console.error('Remix request handler error:', error);
+    throw error;
+  }
 });
