@@ -1,5 +1,5 @@
 [build]
-  command = "npm ci && npm run build:netlify"
+  command = "npm ci --prefer-offline --no-audit && npm run build:netlify"
   publish = "public"
   functions = "netlify/functions"
 
