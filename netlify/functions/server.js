@@ -1,11 +1,8 @@
 import { createRequestHandler } from '@remix-run/netlify';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 
-const serverDir = dirname(fileURLToPath(import.meta.url));
-
-// Trivial change to force Netlify to use the latest version
+// Use process.cwd() instead of import.meta.url for Netlify Functions environment
 export const handler = createRequestHandler({
-  build: join(serverDir, '../../build'),
+  build: join(process.cwd(), 'build'),
   mode: process.env.NODE_ENV
 });
