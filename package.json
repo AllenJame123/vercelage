@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "build:netlify": "npx remix build && npx copyfiles _redirects public/ && ls -la build/",
+    "build:netlify": "remix build && copyfiles _redirects public/",
     "dev": "remix dev",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
