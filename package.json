@@ -8,8 +8,7 @@
     "build:netlify": "remix build && copyfiles _redirects public/ && ls -la build/",
     "dev": "remix dev",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc",
-    "prepare": "npx remix setup node"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
