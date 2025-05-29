@@ -12,12 +12,19 @@ if (!BUILD_PATH) {
   throw new Error('Build path is not defined');
 }
 
-export const handler = createRequestHandler({
+// Create the request handler with explicit route configuration
+const handler = createRequestHandler({
   build: BUILD_PATH,
   mode: process.env.NODE_ENV,
-  // Add error handling for route loading
+  // Add detailed error handling
   onError: (error) => {
     console.error('Remix request handler error:', error);
+    console.error('Error stack:', error.stack);
+    console.error('Build path:', BUILD_PATH);
+    console.error('NODE_ENV:', process.env.NODE_ENV);
     throw error;
   }
 });
+
+// Export the handler
+export { handler };

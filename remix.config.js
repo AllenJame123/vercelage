@@ -20,7 +20,10 @@ export default {
   // Ensure routes are properly compiled
   routes: (defineRoutes) => {
     return defineRoutes((route) => {
-      route("/", "routes/_index.tsx");
+      // Root route
+      route("/", "routes/_index.tsx", { index: true });
+      
+      // Calculator routes
       route("/difference", "routes/difference.tsx");
       route("/date-calculator", "routes/date-calculator.tsx");
       route("/birthday-countdown", "routes/birthday-countdown.tsx");
@@ -29,5 +32,12 @@ export default {
       route("/retirement-calculator", "routes/retirement-calculator.tsx");
       route("/generation-finder", "routes/generation-finder.tsx");
     });
+  },
+  // Add build configuration
+  build: {
+    // Ensure proper module resolution
+    moduleResolution: "node",
+    // Add source maps for better debugging
+    sourcemap: true,
   },
 }; 
