@@ -40,4 +40,13 @@ export default {
     // Add source maps for better debugging
     sourcemap: true,
   },
+  // Add server build configuration
+  serverBuildPath: "build/index.js",
+  assetsBuildDirectory: "public/build",
+  publicPath: "/build/",
+  // Add development configuration
+  devServerPort: 3000,
+  watchPaths: ["./app/**/*"],
+  // Add caching configuration
+  cacheDirectory: "./node_modules/.cache/remix",
 }; 
