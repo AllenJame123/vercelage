@@ -1,20 +1,18 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 const isNetlify = process.env.NETLIFY === "true";
+const isVercel = !!process.env.VERCEL;
 
 export default {
   ignoredRouteFiles: ["**/.*"],
   ...(isNetlify && {
     serverBuildTarget: "netlify",
     server: "./netlify/functions/server.js",
-    serverModuleFormat: "esm",
-    future: {
-      v2_dev: true,
-      v2_errorBoundary: true,
-      v2_headers: true,
-      v2_meta: true,
-      v2_normalizeFormMethod: true,
-      v2_routeConvention: true,
-    },
+    serverModuleFormat: "esm"
+  }),
+  ...(isVercel && {
+    serverBuildTarget: "vercel",
+    server: "./server.js",
+    serverModuleFormat: "esm"
   }),
   tailwind: true,
   // Ensure routes are properly compiled
