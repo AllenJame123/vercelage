@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "build:netlify": "remix build && copyfiles _redirects public/",
+    "build:netlify": "npm install --legacy-peer-deps && remix build && copyfiles _redirects public/",
     "dev": "remix dev",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc",
-    "postinstall": "npx remix setup node"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
