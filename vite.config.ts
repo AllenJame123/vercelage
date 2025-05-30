@@ -33,5 +33,13 @@ export default defineConfig(({ mode, command }) => {
         "@": path.resolve(__dirname, "./src"),
       },
     },
+    optimizeDeps: {
+      exclude: ['vue', '@vue/*'] // Exclude Vue-related dependencies
+    },
+    esbuild: {
+      loader: 'tsx',
+      include: /\.(tsx|ts|jsx|js)$/, // Only process React/TypeScript files
+      exclude: /\.vue$/ // Explicitly exclude Vue files
+    }
   };
 });
