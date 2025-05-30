@@ -9,7 +9,7 @@
     "dev": "remix dev",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc",
-    "postinstall": "remix setup node"
+    "postinstall": "npx remix setup node"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
