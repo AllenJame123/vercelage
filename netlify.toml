@@ -1,5 +1,5 @@
 [build]
-  command = "rm -rf build dist && npm install && npm run build:netlify"
+  command = "rm -rf build dist && npm install && npx remix build && copyfiles _redirects public/"
   publish = "public"
   functions = "netlify/functions"
 
