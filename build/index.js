@@ -2198,7 +2198,7 @@ __export(pregnancy_calculator_exports, {
 import { json as json4 } from "@remix-run/node";
 import { Form as Form3, useActionData as useActionData3, useNavigation as useNavigation3, useLoaderData as useLoaderData4 } from "@remix-run/react";
 import { addWeeks, format as format2 } from "date-fns";
-import { useState as useState3 } from "react";
+import { useState as useState3, useEffect } from "react";
 
 // app/components/ui/calendar.tsx
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -2463,7 +2463,8 @@ async function action3({ request }) {
     conceptionDate: format2(conceptionDate, "MMMM d, yyyy"),
     currentWeek: Math.max(0, currentWeek),
     trimester,
-    daysRemaining
+    daysRemaining,
+    selectedDate: lastPeriodStr
   };
   return json4({ result });
 }
@@ -2517,24 +2518,28 @@ function generatePregnancyTimeline(startDate) {
   }));
 }
 function PregnancyCalculator() {
-  let actionData = useActionData3(), navigation = useNavigation3(), { jsonLd, breadcrumbJsonLd, faqJsonLd } = useLoaderData4(), isSubmitting = navigation.state === "submitting", [selectedDate, setSelectedDate] = useState3(), getDateForWeek = (weekNumber) => selectedDate ? addWeeks(selectedDate, weekNumber - 1) : /* @__PURE__ */ new Date();
+  let actionData = useActionData3(), navigation = useNavigation3(), { jsonLd, breadcrumbJsonLd, faqJsonLd } = useLoaderData4(), isSubmitting = navigation.state === "submitting", serverSelectedDate = actionData && "result" in actionData && actionData.result && actionData.result.selectedDate ? new Date(actionData.result.selectedDate) : void 0, [selectedDate, setSelectedDate] = useState3(serverSelectedDate);
+  useEffect(() => {
+    serverSelectedDate && setSelectedDate(serverSelectedDate);
+  }, [serverSelectedDate]);
+  let getDateForWeek = (weekNumber) => selectedDate ? addWeeks(selectedDate, weekNumber - 1) : /* @__PURE__ */ new Date();
   return /* @__PURE__ */ jsxDEV17("div", { className: "min-h-screen bg-gray-50 py-10", children: /* @__PURE__ */ jsxDEV17("div", { className: "max-w-3xl mx-auto", children: [
     /* @__PURE__ */ jsxDEV17("div", { className: "bg-white rounded-xl shadow p-10 mb-8", children: [
       /* @__PURE__ */ jsxDEV17("h1", { className: "text-4xl font-bold text-gray-900 text-center mb-2", children: "Pregnancy Calculator" }, void 0, !1, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 233,
+        lineNumber: 246,
         columnNumber: 11
       }, this),
       /* @__PURE__ */ jsxDEV17("p", { className: "text-lg text-gray-600 text-center mb-8", children: "Track your pregnancy week by week and get your estimated due date" }, void 0, !1, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 234,
+        lineNumber: 247,
         columnNumber: 11
       }, this),
       /* @__PURE__ */ jsxDEV17(Form3, { method: "post", className: "flex flex-col items-center gap-6", children: [
         /* @__PURE__ */ jsxDEV17("div", { className: "w-full max-w-xs mx-auto", children: [
           /* @__PURE__ */ jsxDEV17(Label, { className: "block text-center text-lg font-semibold mb-2", children: "First Day of Last Period" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 237,
+            lineNumber: 250,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17(
@@ -2549,36 +2554,36 @@ function PregnancyCalculator() {
             !1,
             {
               fileName: "app/routes/pregnancy-calculator.tsx",
-              lineNumber: 238,
+              lineNumber: 251,
               columnNumber: 15
             },
             this
           ),
           /* @__PURE__ */ jsxDEV17("input", { type: "hidden", name: "lastPeriod", value: selectedDate ? selectedDate.toISOString().slice(0, 10) : "", required: !0 }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 244,
+            lineNumber: 257,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 236,
+          lineNumber: 249,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV17(Button, { type: "submit", className: "bg-[#19b6e9] hover:bg-[#15a3cc] text-white font-semibold px-8 py-2 rounded", disabled: isSubmitting, children: isSubmitting ? "Calculating..." : "Calculate" }, void 0, !1, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 246,
+          lineNumber: 259,
           columnNumber: 13
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 235,
+        lineNumber: 248,
         columnNumber: 11
       }, this),
       actionData && "result" in actionData && /* @__PURE__ */ jsxDEV17("div", { className: "mt-8 grid grid-cols-1 md:grid-cols-2 gap-6", children: [
         /* @__PURE__ */ jsxDEV17("div", { className: "border-2 border-[#19b6e9] rounded-lg p-6 text-center", children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 mb-1", children: "Current Week" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 253,
+            lineNumber: 267,
             columnNumber: 17
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-3xl font-bold text-[#19b6e9] mb-1", children: [
@@ -2586,246 +2591,192 @@ function PregnancyCalculator() {
             actionData.result.currentWeek
           ] }, void 0, !0, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 254,
+            lineNumber: 268,
             columnNumber: 17
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500", children: "of pregnancy" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 255,
+            lineNumber: 269,
             columnNumber: 17
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 252,
+          lineNumber: 266,
           columnNumber: 15
         }, this),
         /* @__PURE__ */ jsxDEV17("div", { className: "border-2 border-[#19b6e9] rounded-lg p-6 text-center", children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 mb-1", children: "Due Date" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 258,
+            lineNumber: 272,
             columnNumber: 17
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-2xl font-bold text-[#19b6e9] mb-1", children: actionData.result.dueDate }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 259,
+            lineNumber: 273,
             columnNumber: 17
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500", children: "estimated delivery" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 260,
+            lineNumber: 274,
             columnNumber: 17
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 257,
+          lineNumber: 271,
           columnNumber: 15
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 251,
+        lineNumber: 265,
         columnNumber: 13
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/pregnancy-calculator.tsx",
-      lineNumber: 232,
+      lineNumber: 245,
       columnNumber: 9
     }, this),
-    selectedDate && /* @__PURE__ */ jsxDEV17("div", { className: "bg-white rounded-xl shadow p-8 mb-8", children: [
+    actionData && "result" in actionData && actionData.result.selectedDate && /* @__PURE__ */ jsxDEV17("div", { className: "bg-white rounded-xl shadow p-8 mb-8", children: [
       /* @__PURE__ */ jsxDEV17("h2", { className: "text-2xl font-bold text-center mb-6", children: "Pregnancy Timeline" }, void 0, !1, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 268,
+        lineNumber: 282,
         columnNumber: 13
       }, this),
       /* @__PURE__ */ jsxDEV17("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxDEV17("table", { className: "w-full text-sm border rounded-lg", children: [
         /* @__PURE__ */ jsxDEV17(PregnancyTableHeader, {}, void 0, !1, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 271,
+          lineNumber: 285,
           columnNumber: 17
         }, this),
-        /* @__PURE__ */ jsxDEV17("tbody", { children: generatePregnancyTimeline(selectedDate).map((week) => /* @__PURE__ */ jsxDEV17(
+        /* @__PURE__ */ jsxDEV17("tbody", { children: generatePregnancyTimeline(new Date(actionData.result.selectedDate)).map((week) => /* @__PURE__ */ jsxDEV17(
           PregnancyWeekRow,
           {
             week,
-            currentWeek: actionData && "result" in actionData ? actionData.result.currentWeek : 0
+            currentWeek: actionData.result.currentWeek
           },
           week.week,
           !1,
           {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 274,
+            lineNumber: 288,
             columnNumber: 21
           },
           this
         )) }, void 0, !1, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 272,
+          lineNumber: 286,
           columnNumber: 17
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 270,
+        lineNumber: 284,
         columnNumber: 15
       }, this) }, void 0, !1, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 269,
+        lineNumber: 283,
         columnNumber: 13
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/pregnancy-calculator.tsx",
-      lineNumber: 267,
+      lineNumber: 281,
       columnNumber: 11
     }, this),
     /* @__PURE__ */ jsxDEV17("div", { className: "bg-white rounded-xl shadow p-8 mb-8", children: [
       /* @__PURE__ */ jsxDEV17("h2", { className: "text-2xl font-bold text-center mb-6", children: "How It Works" }, void 0, !1, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 287,
+        lineNumber: 301,
         columnNumber: 11
       }, this),
       /* @__PURE__ */ jsxDEV17("div", { className: "flex flex-col md:flex-row justify-center items-center gap-8", children: [
         /* @__PURE__ */ jsxDEV17("div", { className: "flex flex-col items-center", children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "bg-[#19b6e9] text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold mb-2", children: "1" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 290,
+            lineNumber: 304,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold mb-1", children: "Enter Last Period" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 291,
+            lineNumber: 305,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-center text-sm", children: "Input the first day of your last menstrual period to begin the calculation" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 292,
+            lineNumber: 306,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 289,
+          lineNumber: 303,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV17("div", { className: "text-2xl text-[#19b6e9]", children: "\u2192" }, void 0, !1, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 294,
+          lineNumber: 308,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV17("div", { className: "flex flex-col items-center", children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "bg-[#19b6e9] text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold mb-2", children: "2" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 296,
+            lineNumber: 310,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold mb-1", children: "Calculate" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 297,
+            lineNumber: 311,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-center text-sm", children: "Our calculator determines your current pregnancy week and estimated due date" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 298,
+            lineNumber: 312,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 295,
+          lineNumber: 309,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV17("div", { className: "text-2xl text-[#19b6e9]", children: "\u2192" }, void 0, !1, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 300,
+          lineNumber: 314,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV17("div", { className: "flex flex-col items-center", children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "bg-[#19b6e9] text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold mb-2", children: "3" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 302,
+            lineNumber: 316,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold mb-1", children: "View Results" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 303,
+            lineNumber: 317,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-center text-sm", children: "Follow your pregnancy journey with week-by-week development information" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 304,
+            lineNumber: 318,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 301,
+          lineNumber: 315,
           columnNumber: 13
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 288,
+        lineNumber: 302,
         columnNumber: 11
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/pregnancy-calculator.tsx",
-      lineNumber: 286,
+      lineNumber: 300,
       columnNumber: 9
     }, this),
     /* @__PURE__ */ jsxDEV17("div", { className: "bg-white rounded-xl shadow p-8 mb-8", children: [
       /* @__PURE__ */ jsxDEV17("h2", { className: "text-2xl font-bold text-center mb-6", children: "Why Use Our Pregnancy Calculator" }, void 0, !1, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 310,
+        lineNumber: 324,
         columnNumber: 11
       }, this),
       /* @__PURE__ */ jsxDEV17("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [
-        /* @__PURE__ */ jsxDEV17("div", { className: "flex items-start gap-3", children: [
-          /* @__PURE__ */ jsxDEV17(Check, { className: "text-[#19b6e9] w-6 h-6 mt-1" }, void 0, !1, {
-            fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 313,
-            columnNumber: 15
-          }, this),
-          /* @__PURE__ */ jsxDEV17("div", { children: [
-            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Accurate Due Date Calculation" }, void 0, !1, {
-              fileName: "app/routes/pregnancy-calculator.tsx",
-              lineNumber: 315,
-              columnNumber: 17
-            }, this),
-            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Get a precise estimation of your due date based on your last menstrual period, using the same method healthcare providers use." }, void 0, !1, {
-              fileName: "app/routes/pregnancy-calculator.tsx",
-              lineNumber: 316,
-              columnNumber: 17
-            }, this)
-          ] }, void 0, !0, {
-            fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 314,
-            columnNumber: 15
-          }, this)
-        ] }, void 0, !0, {
-          fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 312,
-          columnNumber: 13
-        }, this),
-        /* @__PURE__ */ jsxDEV17("div", { className: "flex items-start gap-3", children: [
-          /* @__PURE__ */ jsxDEV17(Check, { className: "text-[#19b6e9] w-6 h-6 mt-1" }, void 0, !1, {
-            fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 320,
-            columnNumber: 15
-          }, this),
-          /* @__PURE__ */ jsxDEV17("div", { children: [
-            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Week-by-Week Development Tracking" }, void 0, !1, {
-              fileName: "app/routes/pregnancy-calculator.tsx",
-              lineNumber: 322,
-              columnNumber: 17
-            }, this),
-            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Follow your baby's growth with detailed weekly updates about development milestones, size comparisons, and important medical procedures." }, void 0, !1, {
-              fileName: "app/routes/pregnancy-calculator.tsx",
-              lineNumber: 323,
-              columnNumber: 17
-            }, this)
-          ] }, void 0, !0, {
-            fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 321,
-            columnNumber: 15
-          }, this)
-        ] }, void 0, !0, {
-          fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 319,
-          columnNumber: 13
-        }, this),
         /* @__PURE__ */ jsxDEV17("div", { className: "flex items-start gap-3", children: [
           /* @__PURE__ */ jsxDEV17(Check, { className: "text-[#19b6e9] w-6 h-6 mt-1" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
@@ -2833,12 +2784,12 @@ function PregnancyCalculator() {
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { children: [
-            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Trimester Breakdown" }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Accurate Due Date Calculation" }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 329,
               columnNumber: 17
             }, this),
-            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Understand which trimester you're in and what to expect during each phase of your pregnancy journey." }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Get a precise estimation of your due date based on your last menstrual period, using the same method healthcare providers use." }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 330,
               columnNumber: 17
@@ -2860,12 +2811,12 @@ function PregnancyCalculator() {
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { children: [
-            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Medical Timeline" }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Week-by-Week Development Tracking" }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 336,
               columnNumber: 17
             }, this),
-            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Access a comprehensive timeline of recommended medical check-ups, tests, and screenings throughout your pregnancy." }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Follow your baby's growth with detailed weekly updates about development milestones, size comparisons, and important medical procedures." }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 337,
               columnNumber: 17
@@ -2887,12 +2838,12 @@ function PregnancyCalculator() {
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { children: [
-            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Size Visualization" }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Trimester Breakdown" }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 343,
               columnNumber: 17
             }, this),
-            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Visualize your baby's size with familiar fruit and vegetable comparisons that make it easy to understand their growth." }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Understand which trimester you're in and what to expect during each phase of your pregnancy journey." }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 344,
               columnNumber: 17
@@ -2914,12 +2865,12 @@ function PregnancyCalculator() {
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { children: [
-            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Pregnancy Planning" }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Medical Timeline" }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 350,
               columnNumber: 17
             }, this),
-            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Plan ahead with information about important milestones, helping you prepare for each stage of your pregnancy." }, void 0, !1, {
+            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Access a comprehensive timeline of recommended medical check-ups, tests, and screenings throughout your pregnancy." }, void 0, !1, {
               fileName: "app/routes/pregnancy-calculator.tsx",
               lineNumber: 351,
               columnNumber: 17
@@ -2933,89 +2884,143 @@ function PregnancyCalculator() {
           fileName: "app/routes/pregnancy-calculator.tsx",
           lineNumber: 347,
           columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV17("div", { className: "flex items-start gap-3", children: [
+          /* @__PURE__ */ jsxDEV17(Check, { className: "text-[#19b6e9] w-6 h-6 mt-1" }, void 0, !1, {
+            fileName: "app/routes/pregnancy-calculator.tsx",
+            lineNumber: 355,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV17("div", { children: [
+            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Size Visualization" }, void 0, !1, {
+              fileName: "app/routes/pregnancy-calculator.tsx",
+              lineNumber: 357,
+              columnNumber: 17
+            }, this),
+            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Visualize your baby's size with familiar fruit and vegetable comparisons that make it easy to understand their growth." }, void 0, !1, {
+              fileName: "app/routes/pregnancy-calculator.tsx",
+              lineNumber: 358,
+              columnNumber: 17
+            }, this)
+          ] }, void 0, !0, {
+            fileName: "app/routes/pregnancy-calculator.tsx",
+            lineNumber: 356,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, !0, {
+          fileName: "app/routes/pregnancy-calculator.tsx",
+          lineNumber: 354,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV17("div", { className: "flex items-start gap-3", children: [
+          /* @__PURE__ */ jsxDEV17(Check, { className: "text-[#19b6e9] w-6 h-6 mt-1" }, void 0, !1, {
+            fileName: "app/routes/pregnancy-calculator.tsx",
+            lineNumber: 362,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV17("div", { children: [
+            /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold", children: "Pregnancy Planning" }, void 0, !1, {
+              fileName: "app/routes/pregnancy-calculator.tsx",
+              lineNumber: 364,
+              columnNumber: 17
+            }, this),
+            /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-500 text-sm", children: "Plan ahead with information about important milestones, helping you prepare for each stage of your pregnancy." }, void 0, !1, {
+              fileName: "app/routes/pregnancy-calculator.tsx",
+              lineNumber: 365,
+              columnNumber: 17
+            }, this)
+          ] }, void 0, !0, {
+            fileName: "app/routes/pregnancy-calculator.tsx",
+            lineNumber: 363,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, !0, {
+          fileName: "app/routes/pregnancy-calculator.tsx",
+          lineNumber: 361,
+          columnNumber: 13
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 311,
+        lineNumber: 325,
         columnNumber: 11
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/pregnancy-calculator.tsx",
-      lineNumber: 309,
+      lineNumber: 323,
       columnNumber: 9
     }, this),
     /* @__PURE__ */ jsxDEV17("div", { className: "bg-white rounded-xl shadow p-8 mb-8", children: [
       /* @__PURE__ */ jsxDEV17("h2", { className: "text-2xl font-bold text-center mb-6", children: "Frequently Asked Questions" }, void 0, !1, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 358,
+        lineNumber: 372,
         columnNumber: 11
       }, this),
       /* @__PURE__ */ jsxDEV17("div", { className: "space-y-6", children: [
         /* @__PURE__ */ jsxDEV17("div", { className: "border-b pb-4", children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold text-[#19b6e9] mb-1", children: "How is the due date calculated?" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 361,
+            lineNumber: 375,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-600 text-sm", children: "The due date is calculated by adding 280 days (40 weeks) to the first day of your last menstrual period. This is known as Naegele's rule and is the standard method used by healthcare providers." }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 362,
+            lineNumber: 376,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 360,
+          lineNumber: 374,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV17("div", { className: "border-b pb-4", children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold text-[#19b6e9] mb-1", children: "What are the three trimesters of pregnancy?" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 365,
+            lineNumber: 379,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-600 text-sm", children: "The three trimesters are: First trimester (weeks 1-13), Second trimester (weeks 14-26), and Third trimester (weeks 27-40). Each trimester has different developmental milestones and changes." }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 366,
+            lineNumber: 380,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 364,
+          lineNumber: 378,
           columnNumber: 13
         }, this),
         /* @__PURE__ */ jsxDEV17("div", { children: [
           /* @__PURE__ */ jsxDEV17("div", { className: "font-semibold text-[#19b6e9] mb-1", children: "How accurate is the pregnancy calculator?" }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 369,
+            lineNumber: 383,
             columnNumber: 15
           }, this),
           /* @__PURE__ */ jsxDEV17("div", { className: "text-gray-600 text-sm", children: "The calculator provides an estimate based on the standard 40-week pregnancy. However, only about 5% of women deliver on their exact due date. Most babies are born within two weeks before or after the due date." }, void 0, !1, {
             fileName: "app/routes/pregnancy-calculator.tsx",
-            lineNumber: 370,
+            lineNumber: 384,
             columnNumber: 15
           }, this)
         ] }, void 0, !0, {
           fileName: "app/routes/pregnancy-calculator.tsx",
-          lineNumber: 368,
+          lineNumber: 382,
           columnNumber: 13
         }, this)
       ] }, void 0, !0, {
         fileName: "app/routes/pregnancy-calculator.tsx",
-        lineNumber: 359,
+        lineNumber: 373,
         columnNumber: 11
       }, this)
     ] }, void 0, !0, {
       fileName: "app/routes/pregnancy-calculator.tsx",
-      lineNumber: 357,
+      lineNumber: 371,
       columnNumber: 9
     }, this)
   ] }, void 0, !0, {
     fileName: "app/routes/pregnancy-calculator.tsx",
-    lineNumber: 231,
+    lineNumber: 244,
     columnNumber: 7
   }, this) }, void 0, !1, {
     fileName: "app/routes/pregnancy-calculator.tsx",
-    lineNumber: 230,
+    lineNumber: 243,
     columnNumber: 5
   }, this);
 }
@@ -6589,10 +6594,10 @@ function Index() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { entry: { module: "/build/entry.client-77YKYRWN.js", imports: ["/build/_shared/chunk-O4BRYNJ4.js", "/build/_shared/chunk-XGOTYLZ5.js", "/build/_shared/chunk-YFEOI4V6.js", "/build/_shared/chunk-U4FRFQSK.js", "/build/_shared/chunk-7M6SC7J5.js", "/build/_shared/chunk-SREIQTEP.js", "/build/_shared/chunk-MZF3CFPM.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-NG32EENZ.js", imports: ["/build/_shared/chunk-DCYVUSHA.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: void 0, index: !0, caseSensitive: void 0, module: "/build/routes/_index-4UYWSYXV.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/birthday-countdown": { id: "routes/birthday-countdown", parentId: "root", path: "birthday-countdown", index: void 0, caseSensitive: void 0, module: "/build/routes/birthday-countdown-KOY4P5IZ.js", imports: ["/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/date-calculator": { id: "routes/date-calculator", parentId: "root", path: "date-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/date-calculator-CPFQIZ6G.js", imports: ["/build/_shared/chunk-PFL7Q57P.js", "/build/_shared/chunk-DOGCWUIS.js", "/build/_shared/chunk-SWRLEF66.js", "/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/difference": { id: "routes/difference", parentId: "root", path: "difference", index: void 0, caseSensitive: void 0, module: "/build/routes/difference-UJOCZP6U.js", imports: ["/build/_shared/chunk-PFL7Q57P.js", "/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/generation-finder": { id: "routes/generation-finder", parentId: "root", path: "generation-finder", index: void 0, caseSensitive: void 0, module: "/build/routes/generation-finder-Y3CDVAGS.js", imports: ["/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/leap-year-calculator": { id: "routes/leap-year-calculator", parentId: "root", path: "leap-year-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/leap-year-calculator-QHSEAOD2.js", imports: ["/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/pregnancy-calculator": { id: "routes/pregnancy-calculator", parentId: "root", path: "pregnancy-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/pregnancy-calculator-TUBPQPJZ.js", imports: ["/build/_shared/chunk-DOGCWUIS.js", "/build/_shared/chunk-SWRLEF66.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/retirement-calculator": { id: "routes/retirement-calculator", parentId: "root", path: "retirement-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/retirement-calculator-MQFT2FGL.js", imports: ["/build/_shared/chunk-SWRLEF66.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "e8132535", hmr: { runtime: "/build/_shared\\chunk-SREIQTEP.js", timestamp: 1748435343568 }, url: "/build/manifest-E8132535.js" };
+var assets_manifest_default = { entry: { module: "/build/entry.client-77YKYRWN.js", imports: ["/build/_shared/chunk-O4BRYNJ4.js", "/build/_shared/chunk-XGOTYLZ5.js", "/build/_shared/chunk-YFEOI4V6.js", "/build/_shared/chunk-U4FRFQSK.js", "/build/_shared/chunk-7M6SC7J5.js", "/build/_shared/chunk-SREIQTEP.js", "/build/_shared/chunk-MZF3CFPM.js", "/build/_shared/chunk-PNG5AS42.js"] }, routes: { root: { id: "root", parentId: void 0, path: "", index: void 0, caseSensitive: void 0, module: "/build/root-NG32EENZ.js", imports: ["/build/_shared/chunk-DCYVUSHA.js", "/build/_shared/chunk-G7CHZRZX.js"], hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/_index": { id: "routes/_index", parentId: "root", path: "/", index: !0, caseSensitive: void 0, module: "/build/routes/_index-4UYWSYXV.js", imports: void 0, hasAction: !1, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/birthday-countdown": { id: "routes/birthday-countdown", parentId: "root", path: "/birthday-countdown", index: void 0, caseSensitive: void 0, module: "/build/routes/birthday-countdown-KOY4P5IZ.js", imports: ["/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/date-calculator": { id: "routes/date-calculator", parentId: "root", path: "/date-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/date-calculator-CPFQIZ6G.js", imports: ["/build/_shared/chunk-PFL7Q57P.js", "/build/_shared/chunk-DOGCWUIS.js", "/build/_shared/chunk-SWRLEF66.js", "/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/difference": { id: "routes/difference", parentId: "root", path: "/difference", index: void 0, caseSensitive: void 0, module: "/build/routes/difference-UJOCZP6U.js", imports: ["/build/_shared/chunk-PFL7Q57P.js", "/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/generation-finder": { id: "routes/generation-finder", parentId: "root", path: "/generation-finder", index: void 0, caseSensitive: void 0, module: "/build/routes/generation-finder-Y3CDVAGS.js", imports: ["/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/leap-year-calculator": { id: "routes/leap-year-calculator", parentId: "root", path: "/leap-year-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/leap-year-calculator-QHSEAOD2.js", imports: ["/build/_shared/chunk-QX7IUN3N.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/pregnancy-calculator": { id: "routes/pregnancy-calculator", parentId: "root", path: "/pregnancy-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/pregnancy-calculator-3KHKYNBQ.js", imports: ["/build/_shared/chunk-DOGCWUIS.js", "/build/_shared/chunk-SWRLEF66.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 }, "routes/retirement-calculator": { id: "routes/retirement-calculator", parentId: "root", path: "/retirement-calculator", index: void 0, caseSensitive: void 0, module: "/build/routes/retirement-calculator-MQFT2FGL.js", imports: ["/build/_shared/chunk-SWRLEF66.js", "/build/_shared/chunk-6HBMKAOW.js", "/build/_shared/chunk-AZCUNKMG.js", "/build/_shared/chunk-KZWWNWMV.js", "/build/_shared/chunk-WMG2BVA6.js", "/build/_shared/chunk-B43JI2TA.js"], hasAction: !0, hasLoader: !0, hasClientAction: !1, hasClientLoader: !1, hasErrorBoundary: !1 } }, version: "d36ac531", hmr: { runtime: "/build/_shared\\chunk-SREIQTEP.js", timestamp: 1748610308999 }, url: "/build/manifest-D36AC531.js" };
 
 // server-entry-module:@remix-run/dev/server-build
-var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
+var mode = "development", assetsBuildDirectory = "public/build", future = { v3_fetcherPersist: !1, v3_relativeSplatPath: !1, v3_throwAbortReason: !1, v3_routeConfig: !1, v3_singleFetch: !1, v3_lazyRouteDiscovery: !1, unstable_optimizeDeps: !1 }, publicPath = "/build/", entry = { module: entry_server_node_exports }, routes = {
   root: {
     id: "root",
     parentId: void 0,
@@ -6604,7 +6609,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/retirement-calculator": {
     id: "routes/retirement-calculator",
     parentId: "root",
-    path: "retirement-calculator",
+    path: "/retirement-calculator",
     index: void 0,
     caseSensitive: void 0,
     module: retirement_calculator_exports
@@ -6612,7 +6617,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/leap-year-calculator": {
     id: "routes/leap-year-calculator",
     parentId: "root",
-    path: "leap-year-calculator",
+    path: "/leap-year-calculator",
     index: void 0,
     caseSensitive: void 0,
     module: leap_year_calculator_exports
@@ -6620,7 +6625,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/pregnancy-calculator": {
     id: "routes/pregnancy-calculator",
     parentId: "root",
-    path: "pregnancy-calculator",
+    path: "/pregnancy-calculator",
     index: void 0,
     caseSensitive: void 0,
     module: pregnancy_calculator_exports
@@ -6628,7 +6633,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/birthday-countdown": {
     id: "routes/birthday-countdown",
     parentId: "root",
-    path: "birthday-countdown",
+    path: "/birthday-countdown",
     index: void 0,
     caseSensitive: void 0,
     module: birthday_countdown_exports
@@ -6636,7 +6641,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/generation-finder": {
     id: "routes/generation-finder",
     parentId: "root",
-    path: "generation-finder",
+    path: "/generation-finder",
     index: void 0,
     caseSensitive: void 0,
     module: generation_finder_exports
@@ -6644,7 +6649,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/date-calculator": {
     id: "routes/date-calculator",
     parentId: "root",
-    path: "date-calculator",
+    path: "/date-calculator",
     index: void 0,
     caseSensitive: void 0,
     module: date_calculator_exports
@@ -6652,7 +6657,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/difference": {
     id: "routes/difference",
     parentId: "root",
-    path: "difference",
+    path: "/difference",
     index: void 0,
     caseSensitive: void 0,
     module: difference_exports
@@ -6660,7 +6665,7 @@ var mode = "development", assetsBuildDirectory = "public\\build", future = { v3_
   "routes/_index": {
     id: "routes/_index",
     parentId: "root",
-    path: void 0,
+    path: "/",
     index: !0,
     caseSensitive: void 0,
     module: index_exports
