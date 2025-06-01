@@ -1,6 +1,6 @@
 [build]
   base = "remix-migration"
-  command = "npm run build:netlify"
+  command = "npm run clean && npm run build:netlify"
   publish = "public"
   functions = "netlify/functions"
 
