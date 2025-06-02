@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "npx remix build",
-    "build:netlify": "npm install --legacy-peer-deps && npx remix build && npx copyfiles _redirects public/",
+    "build:netlify": "npx remix build && npx copyfiles _redirects public/",
     "dev": "npx remix dev",
     "start": "npx remix-serve ./build/index.js",
     "typecheck": "tsc",
