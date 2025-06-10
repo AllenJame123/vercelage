@@ -184,6 +184,11 @@ The Age-O-Matic website currently uses React with some SSR capabilities through 
     - [ ] Core Web Vitals
     - [ ] Page load speed
     - [ ] Mobile optimization
+- [ ] Netlify deployment troubleshooting
+  - [ ] Investigate missing @remix-run/netlify module in deployed function
+  - [ ] Review Netlify build logs for dependency installation issues
+  - [ ] Test moving @remix-run/netlify to devDependencies
+  - [ ] Try bundling all node modules by removing external_node_modules from netlify.toml
 
 ## Executor's Feedback or Assistance Requests
 *Progress update: Starting comprehensive SEO verification process*
@@ -210,6 +215,20 @@ The Age-O-Matic website currently uses React with some SSR capabilities through 
    - *Verify mobile responsiveness*
    - *Check Core Web Vitals*
    - *Validate all structured data*
+
+5. *Build Blocker: Netlify/CI Build Fails Before Dependency Installation*
+   - *Error: /opt/build-bin/run-build-functions.sh: line XX: mkdir: command not found, touch: command not found, mise: command not found, Error setting python version from 3.13, Failing build: Failed to install dependencies.*
+   - *Analysis: The build environment is missing basic Unix utilities (mkdir, touch), which is highly unusual for a standard CI/CD environment. The error with mise and Python versioning suggests a misconfigured or missing environment manager. The build fails before reaching project dependency installation.*
+   - *Assistance Request: Is this a Netlify build, or are you running this in a custom CI/CD environment? Please clarify so I can suggest the most appropriate fix.*
+
+*Blocker: Netlify deployment fails with Runtime.ImportModuleError for @remix-run/netlify, despite being present in package.json and netlify.toml configured for external_node_modules. Cleared build cache and redeployed, but issue persists.*
+
+*Next steps:*
+1. Review Netlify build logs for errors/warnings about dependency installation.
+2. Try moving @remix-run/netlify to devDependencies and redeploy.
+3. Remove external_node_modules from netlify.toml to force bundling all node modules, then redeploy.
+
+*Awaiting user confirmation to proceed with these steps or for further instructions.*
 
 ## Lessons
 - The current project already has some SSR capabilities through vite-plugin-ssr, which is a good starting point

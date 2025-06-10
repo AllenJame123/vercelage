@@ -4,8 +4,7 @@
   functions = "netlify/functions"
 
 [functions]
-  node_bundler = "esbuild"
-  external_node_modules = ["@remix-run/*"]
+  node_bundler = "zisi"
 
 # Serve static assets directly
 [[redirects]]
