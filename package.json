@@ -5,12 +5,19 @@
   "type": "module",
   "scripts": {
     "build": "npx remix build",
+<<<<<<< HEAD
     "build:netlify": "npx remix build && npx copyfiles _redirects public/",
     "dev": "npx remix dev",
     "start": "npx remix-serve ./build/index.js",
     "typecheck": "tsc",
     "clean": "rimraf build dist",
     "postinstall": "npm install @remix-run/netlify"
+=======
+    "build:netlify": "npm install --legacy-peer-deps && npx remix build && npx copyfiles _redirects public/",
+    "dev": "npx remix dev",
+    "start": "npx remix-serve ./build/index.js",
+    "typecheck": "tsc"
+>>>>>>> f499a4c14dcd4d7c26aa407f42ea443124fea033
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -78,10 +85,19 @@
     "esbuild": "^0.25.5",
     "eslint": "^8.57.0",
     "postcss": "^8.4.47",
+<<<<<<< HEAD
     "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   },
+=======
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+>>>>>>> f499a4c14dcd4d7c26aa407f42ea443124fea033
   "future": {
     "v3_fetcherPersist": true,
     "v3_lazyRouteDiscovery": true,

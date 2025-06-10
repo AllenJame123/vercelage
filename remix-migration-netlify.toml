@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [build]
   base = "remix-migration"
   command = "npm run clean && npm run build:netlify"
@@ -23,3 +24,30 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin" 
+=======
+[build]
+  base = "remix-migration"
+  command = "npm run build:netlify"
+  publish = "public"
+  functions = "netlify/functions"
+
+[dev]
+  command = "remix dev"
+  port = 3000
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin" 
+>>>>>>> f499a4c14dcd4d7c26aa407f42ea443124fea033
